@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "name": "opencode",
+  "description": "OpenCode plugin and matching nono profile. Provides sandbox-aware diagnostics on permission failures via OpenCode's plugin hooks.",
+  "license": "Apache-2.0",
+  "platforms": ["macos", "linux"],
+  "min_nono_version": "0.44.0",
+  "artifacts": [
+    { "type": "profile", "path": "policy.json", "install_as": "opencode" },
+    { "type": "plugin", "path": "plugin/nono-sandbox.ts" },
+    { "type": "plugin", "path": "skills/nono-sandbox/SKILL.md" }
+  ],
+  "wiring": [
+    {
+      "type": "symlink",
+      "link": "$HOME/.config/opencode/plugins/nono-sandbox.ts",
+      "target": "$PACK_DIR/plugin/nono-sandbox.ts"
+    },
+    {
+      "type": "symlink",
+      "link": "$HOME/.config/opencode/skills/nono-sandbox",
+      "target": "$PACK_DIR/skills/nono-sandbox"
+    }
+  ]
+}
