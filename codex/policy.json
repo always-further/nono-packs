@@ -22,14 +22,8 @@
     "capability_elevation": false
   },
   "filesystem": {
-    "allow": [
-      "$HOME/.codex",
-      "$HOME/.agents",
-      "$HOME/.config/nono/profiles"
-    ],
-    "read": [
-      "$HOME/.config/nono/packages"
-    ]
+    "allow": ["$HOME/.codex", "$HOME/.agents"],
+    "read": ["$HOME/.config/nono/packages", "$HOME/.config/nono/profiles"]
   },
   "network": { "block": false },
   "workdir": { "access": "readwrite" },

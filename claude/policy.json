@@ -26,15 +26,8 @@
     "capability_elevation": false
   },
   "filesystem": {
-    "allow": [
-      "$HOME/.claude",
-      "$HOME/.cache/claude",
-      "$HOME/.config/nono/profiles",
-      "/tmp/claude-$UID"
-    ],
-    "read": [
-      "$HOME/.config/nono/packages"
-    ],
+    "allow": ["$HOME/.claude", "$HOME/.cache/claude", "/tmp/claude-$UID"],
+    "read": ["$HOME/.config/nono/packages", "$HOME/.config/nono/profiles"],
     "allow_file": [
       "$HOME/.claude.json",
       "$HOME/.claude.json.lock",
