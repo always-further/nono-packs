@@ -26,13 +26,15 @@
     "allow": [
       "$HOME/.pi",
       "$HOME/.agents",
-      "$HOME/.config/nono/profiles"
+      "$HOME/.config/nono/profiles",
+      "$TMPDIR"
     ],
     "read": [
       "$HOME/.config/gh",
       "$HOME/.config/git",
       "$HOME/.local/share/uv",
       "$HOME/.config/nono/packages",
+      "$HOME/.bun",
       "/opt/homebrew/bin",
       "/opt/homebrew/opt/node/bin",
       "$HOME/Library/Application Support/fnm",
