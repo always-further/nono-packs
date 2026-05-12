@@ -1,0 +1,63 @@
+{
+  "extends": "default",
+  "meta": {
+    "name": "pi",
+    "version": "1.0.0",
+    "description": "Pi coding agent (pi.dev)",
+    "author": "always-further"
+  },
+  "groups": {
+    "include": [
+      "user_caches_macos",
+      "user_caches_linux",
+      "node_runtime",
+      "python_runtime",
+      "nix_runtime",
+      "linux_sysfs_read",
+      "git_config",
+      "unlink_protection"
+    ]
+  },
+  "security": {
+    "signal_mode": "isolated",
+    "capability_elevation": false
+  },
+  "filesystem": {
+    "allow": [
+      "$HOME/.pi",
+      "$HOME/.agents",
+      "$HOME/.config/nono/profiles",
+      "$TMPDIR"
+    ],
+    "read": [
+      "$HOME/.config/gh",
+      "$HOME/.config/git",
+      "$HOME/.local/share/uv",
+      "$HOME/.config/nono/packages",
+      "/opt/homebrew/bin",
+      "/opt/homebrew/opt/node/bin",
+      "$HOME/Library/Application Support/fnm",
+      "$HOME/.local/state/fnm_multishells"
+    ],
+    "read_file": [
+      "$HOME/.gitconfig"
+    ]
+  },
+  "network": {
+    "network_profile": "developer",
+    "allow_domain": [
+      "api.z.ai",
+      "inference.baseten.co",
+      "api.cloudflare.com",
+      "api.search.brave.com"
+    ],
+    "open_port": [1234]
+  },
+  "workdir": { "access": "readwrite" },
+  "allow_launch_services": true,
+  "undo": {
+    "exclude_patterns": ["node_modules", ".next", "__pycache__", "target"],
+    "exclude_globs": ["*.tmp.[0-9]*.[0-9]*"]
+  },
+  "interactive": true
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "name": "pi",
+  "description": "nono sandbox profile for the Pi coding agent (pi.dev)",
+  "license": "Apache-2.0",
+  "platforms": ["macos", "linux"],
+  "min_nono_version": "0.47.0",
+  "artifacts": [
+    { "type": "profile", "path": "policy.json", "install_as": "pi" }
+  ]
+}
