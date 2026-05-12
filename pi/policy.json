@@ -26,8 +26,7 @@
     "allow": [
       "$HOME/.pi",
       "$HOME/.agents",
-      "$HOME/.config/nono/profiles",
-      "$TMPDIR"
+      "$HOME/.config/nono/profiles"
     ],
     "read": [
       "$HOME/.config/gh",
@@ -38,9 +37,6 @@
       "/opt/homebrew/opt/node/bin",
       "$HOME/Library/Application Support/fnm",
       "$HOME/.local/state/fnm_multishells"
-    ],
-    "read_file": [
-      "$HOME/.gitconfig"
     ]
   },
   "network": {
