@@ -5,8 +5,10 @@ Sandbox profile for running [Pi](https://pi.dev/) inside a [nono](https://nono.s
 Install and run:
 
 ```
-nono run --profile pi -- pi
+mkdir -p ~/.pi && nono run --profile pi -- pi
 ```
+
+The `mkdir` is needed on first run — macOS Seatbelt can only grant access to paths that already exist. After the first run `~/.pi` persists and you can drop it.
 
 If the pack isn't already installed, nono will prompt to pull it.
 
