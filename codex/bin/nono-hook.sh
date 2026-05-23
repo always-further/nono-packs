@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # nono-hook.sh - Codex PostToolUse hook for nono sandbox diagnostics
-# Version: 1.5.0
+# Version: 1.6.0
+#
+# Behavioural change in 1.6.0: denial detection no longer scans the
+# entire successful tool response for broad text such as "Operation not
+# permitted". It first finds a denial-shaped line, prefers a path from
+# that line, then validates the candidate with `nono why --self --json`.
 #
 # Behavioural change in 1.5.0: Option B now writes the proposed
 # profile to ~/.config/nono/profile-drafts/ (the only writable
@@ -55,33 +60,67 @@ INPUT=$(cat)
 PMODE=$(echo "$INPUT" | jq -r '.permission_mode // "default"' 2>/dev/null)
 [ "$PMODE" = "bypassPermissions" ] && exit 0
 
-# Gate on actual sandbox-denial signatures only. Anything else (file
-# too large, file not found, parse errors) is not a sandbox issue.
-TOOL_RESPONSE=$(echo "$INPUT" | jq -r '.tool_response | tostring' 2>/dev/null)
-if ! echo "$TOOL_RESPONSE" | grep -qiE 'operation not permitted|permission denied|EPERM|EACCES|landlock|sandbox.*denied'; then
+TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // ""' 2>/dev/null)
+
+# MCP-style successful responses may contain arbitrary document text.
+# If Codex tells us the response is not an error, do not mine it for
+# denial phrases.
+IS_ERROR=$(echo "$INPUT" | jq -r 'if (.tool_response | type) == "object" and (.tool_response | has("isError")) then .tool_response.isError else empty end' 2>/dev/null)
+[ "$IS_ERROR" = "false" ] && exit 0
+
+TOOL_RESPONSE=$(echo "$INPUT" | jq -r '
+  .tool_response
+  | if type == "string" then .
+    elif type == "object" or type == "array" then [.. | strings] | join("\n")
+    else tostring
+    end
+' 2>/dev/null)
+TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input | tostring' 2>/dev/null)
+
+DENIAL_REGEX='operation not permitted|permission denied|EPERM|EACCES|landlock|sandbox.*denied'
+PATH_REGEX='(~/|/)[^[:space:]"'"'"',;]+'
+OP_READ="read"
+OP_WRITE="write"
+OP_READWRITE="readwrite"
+STATUS_DENIED="denied"
+
+DENIAL_LINE=$(echo "$TOOL_RESPONSE" | grep -iE "$DENIAL_REGEX" | grep -E "$PATH_REGEX" | head -n 1)
+if [ -z "$DENIAL_LINE" ]; then
+    DENIAL_LINE=$(echo "$TOOL_RESPONSE" | grep -iE '(^|[^[:alnum:]_])(error|failed|failure|denied|cannot|can'\''t|unable|fatal|exception|traceback|panic|hook|tool|bash|apply_patch|read|write|open|create|remove|delete|rename|move|copy|chmod|chown|mkdir|rmdir|touch|tee|cat|sed|awk|rg|grep|ls|nl|cp|mv|rm)([^[:alnum:]_]|$)' | grep -iE "$DENIAL_REGEX" | head -n 1)
+fi
+[ -z "$DENIAL_LINE" ] && exit 0
+
+FAILED_PATH=$(echo "$DENIAL_LINE" | grep -oE "$PATH_REGEX" | head -n 1)
+if [ -z "$FAILED_PATH" ]; then
+    FAILED_PATH=$(echo "$TOOL_INPUT" | grep -oE "$PATH_REGEX" | head -n 1)
+fi
+[ -z "$FAILED_PATH" ] && exit 0
+FAILED_PATH=${FAILED_PATH%:}
+
+case "$FAILED_PATH" in
+    \~/*) FAILED_PATH="${HOME}/${FAILED_PATH#\~/}" ;;
+    \~)   FAILED_PATH="$HOME" ;;
+esac
+
+OP="$OP_READ"
+WRITE_REGEX='(^|[^[:alnum:]_])(apply_patch|write|edit|create|created|creating|delete|deleted|deleting|remove|removed|removing|rename|renamed|move|moved|copy|copied|chmod|chown|mkdir|rmdir|touch|tee|install|append|truncate|unlink)([^[:alnum:]_]|$)|(^|[[:space:]])(>|>>)([[:space:]]|$)'
+READWRITE_REGEX='(^|[^[:alnum:]_])(readwrite|allow)([^[:alnum:]_]|$)'
+OP_HAYSTACK="$TOOL_NAME
+$DENIAL_LINE
+$TOOL_INPUT"
+if echo "$OP_HAYSTACK" | grep -qiE "$READWRITE_REGEX"; then
+    OP="$OP_READWRITE"
+elif echo "$OP_HAYSTACK" | grep -qiE "$WRITE_REGEX"; then
+    OP="$OP_WRITE"
+fi
+
+WHY_JSON=$(nono why --self --json --path "$FAILED_PATH" --op "$OP" 2>/dev/null)
+WHY_STATUS=$(echo "$WHY_JSON" | jq -r '.status // empty' 2>/dev/null)
+if [ "$WHY_STATUS" != "$STATUS_DENIED" ]; then
     exit 0
 fi
 
-# Path extraction. Try multiple sources in order of fidelity:
-#  1. tool_input — the original argument the model passed (e.g. the
-#     `path` field for Read, or extracted from `command` for Bash).
-#     This carries the user-typed form (`~/test.txt`, `./foo`).
-#  2. tool_response — the error string. Catches absolute paths the
-#     kernel/OpenSSL/etc surface in their messages.
-# Accept both `/` absolute and `~/` tilde-prefixed forms — earlier
-# versions only matched `/...` and fell back to a `<blocked-path>`
-# literal when the denial reported a tilde path.
-TOOL_INPUT=$(echo "$INPUT" | jq -r '.tool_input | tostring' 2>/dev/null)
-PATH_REGEX='(~/|/)[^[:space:]"'"'"',]+'
-FAILED_PATH=$(echo "$TOOL_INPUT" | grep -oE "$PATH_REGEX" | head -n 1)
-[ -z "$FAILED_PATH" ] && FAILED_PATH=$(echo "$TOOL_RESPONSE" | grep -oE "$PATH_REGEX" | head -n 1)
-# Resolve tilde to $HOME so all downstream uses (the suggested
-# command, the `read:` array, the derived profile name) are unambiguous.
-case "$FAILED_PATH" in
-    "~/"*) FAILED_PATH="${HOME}/${FAILED_PATH#\~/}" ;;
-    "~")   FAILED_PATH="$HOME" ;;
-esac
-DISPLAY_PATH="${FAILED_PATH:-<blocked-path>}"
+DISPLAY_PATH="$FAILED_PATH"
 
 # Pack identity. Hardcoded — the pack ships with `install_as: codex`,
 # so suggesting `extends: "codex"` is correct for any user who
@@ -108,13 +147,31 @@ fi
 
 REASON="[nono sandbox] $DISPLAY_PATH was blocked by the OS sandbox — not Codex, not TCC, not Unix permissions. See additional context for diagnosis and the two options."
 
+case "$OP" in
+    "$OP_READWRITE")
+        FLAG="--allow"
+        PROFILE_ACCESS_FIELD="allow"
+        NOTE_OP="$OP_READWRITE"
+        ;;
+    "$OP_WRITE")
+        FLAG="--write"
+        PROFILE_ACCESS_FIELD="$OP_WRITE"
+        NOTE_OP="$OP_WRITE"
+        ;;
+    *)
+        FLAG="--read"
+        PROFILE_ACCESS_FIELD="$OP_READ"
+        NOTE_OP="$OP_READ"
+        ;;
+esac
+
 CONTEXT="Sandbox denial. Path blocked: $DISPLAY_PATH
 Profile name to use for the persistent fix below: $DEFAULT_PROFILE_NAME
 
 Offer the user TWO choices (A or B). Wait for their answer.
 
   A) one-off — exit and restart with this path allowed:
-       nono run --allow $DISPLAY_PATH -- codex
+       nono run $FLAG $DISPLAY_PATH -- codex
 
   B) persistent — create a profile file using the name above
      ($DEFAULT_PROFILE_NAME).
@@ -141,7 +198,7 @@ NOT substitute placeholders, just write what is below):
 {
   \"extends\": \"$PACK_PROFILE\",
   \"meta\": { \"name\": \"$DEFAULT_PROFILE_NAME\", \"version\": \"1.0.0\" },
-  \"filesystem\": { \"read\": [\"$DISPLAY_PATH\"] }
+  \"filesystem\": { \"$PROFILE_ACCESS_FIELD\": [\"$DISPLAY_PATH\"] }
 }
 
 The profiles/ directory is read-only from inside the sandbox by
@@ -158,8 +215,8 @@ user has to promote and restart for the new profile to take effect.
 
 Notes:
   - Use 'read' for view-only; 'write' for modify-only; 'allow' for r+w.
-    Default is 'read' above.
-  - For the precise rule that blocked the path: nono why --path $DISPLAY_PATH --op read"
+    This failure was inferred as '$NOTE_OP'.
+  - For the precise rule that blocked the path: nono why --self --path $DISPLAY_PATH --op $OP"
 
 jq -n --arg reason "$REASON" --arg ctx "$CONTEXT" '{
   "decision": "block",
