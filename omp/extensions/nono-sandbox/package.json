@@ -1,0 +1,9 @@
+{
+  "name": "@nono/omp-sandbox",
+  "version": "0.1.0",
+  "description": "nono sandbox awareness extension for Oh My Pi",
+  "license": "Apache-2.0",
+  "omp": {
+    "extensions": ["./index.ts"]
+  }
+}

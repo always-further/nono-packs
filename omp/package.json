@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "name": "omp",
+  "version": "0.1.0",
+  "description": "Oh My Pi coding harness plugin and matching nono profile. Provides sandbox-aware diagnostics on permission failures via extension event hooks.",
+  "license": "Apache-2.0",
+  "platforms": ["macos", "linux"],
+  "min_nono_version": "0.64.0",
+  "artifacts": [
+    { "type": "profile", "path": "policy.json", "install_as": "omp" },
+    { "type": "plugin", "path": "README.md" },
+    { "type": "plugin", "path": "extensions/nono-sandbox/package.json" },
+    { "type": "plugin", "path": "extensions/nono-sandbox/index.ts" },
+    { "type": "plugin", "path": "skills/nono-sandbox/SKILL.md" },
+    { "type": "plugin", "path": "wiring/profile-drafts-dir-marker" }
+  ],
+  "wiring": [
+    {
+      "type": "write_file",
+      "source": "wiring/profile-drafts-dir-marker",
+      "dest": "$NONO_CONFIG/profile-drafts/.nono-omp-pack-marker"
+    },
+    {
+      "type": "symlink",
+      "link": "$HOME/.omp/agent/extensions/nono-sandbox",
+      "target": "$PACK_DIR/extensions/nono-sandbox"
+    },
+    {
+      "type": "symlink",
+      "link": "$HOME/.omp/agent/skills/nono-sandbox",
+      "target": "$PACK_DIR/skills/nono-sandbox"
+    }
+  ]
+}

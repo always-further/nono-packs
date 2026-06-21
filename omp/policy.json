@@ -1,0 +1,69 @@
+{
+  "extends": "default",
+  "meta": {
+    "name": "omp",
+    "version": "1.0.0",
+    "description": "Oh My Pi coding harness (registry-managed)",
+    "author": "always-further"
+  },
+  "groups": {
+    "include": [
+      "node_runtime",
+      "rust_runtime",
+      "python_runtime",
+      { "name": "user_caches_macos", "when": "macos" },
+      { "name": "user_caches_linux", "when": "linux" },
+      { "name": "linux_sysfs_read", "when": "linux" },
+      "nix_runtime",
+      "git_config",
+      "unlink_protection"
+    ]
+  },
+  "security": {
+    "signal_mode": "isolated",
+    "capability_elevation": false
+  },
+  "filesystem": {
+    "allow": [
+      "$HOME/.omp",
+      "$NONO_CONFIG/profile-drafts"
+    ],
+    "read": [
+      "$NONO_PACKAGES",
+      "$NONO_CONFIG/profiles"
+    ],
+    "suppress_save_prompt": [
+      "$NONO_PACKAGES/always-further/omp"
+    ]
+  },
+  "network": {
+    "block": false,
+    "allow_domain": [],
+    "credentials": [],
+    "open_port": [],
+    "listen_port": []
+  },
+  "workdir": {
+    "access": "readwrite"
+  },
+  "open_urls": {
+    "allow_origins": [],
+    "allow_localhost": true
+  },
+  "allow_launch_services": true,
+  "environment": {
+    "set_vars": {
+      "OMP_NONO_STATUS_INDICATOR": "true"
+    }
+  },
+  "undo": {
+    "exclude_patterns": [
+      "node_modules",
+      ".next",
+      "__pycache__",
+      "target"
+    ],
+    "exclude_globs": ["*.tmp.[0-9]*.[0-9]*"]
+  },
+  "interactive": true
+}
