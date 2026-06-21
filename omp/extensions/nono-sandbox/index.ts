@@ -107,12 +107,28 @@ export default function (omp: ExtensionAPI) {
 				return;
 			}
 
-			const summary = readFileSync(capFile, "utf8")
-				.split("\n")
-				.slice(0, 12)
-				.join("\n")
-				.trim();
-			ctx.ui.notify(summary || `nono capability file is empty: ${capFile}`, "info");
+			try {
+				const cap = JSON.parse(readFileSync(capFile, "utf8"));
+				const lines: string[] = [];
+
+				if (Array.isArray(cap.fs)) {
+					lines.push(`Filesystem capabilities (${cap.fs.length} rules):`);
+					cap.fs.forEach((entry: any) => {
+						const path = entry.resolved || entry.path || "?";
+						const access = entry.access || "?";
+						lines.push(`  [${access}] ${path}`);
+					});
+				}
+
+				if (typeof cap.net_blocked === "boolean") {
+					lines.push(`\nNetwork: ${cap.net_blocked ? "BLOCKED" : "allowed"}`);
+				}
+
+				const summary = lines.length > 0 ? lines.join("\n") : "nono capability file is empty or unparseable";
+				ctx.ui.notify(summary, "info");
+			} catch (err) {
+				ctx.ui.notify(`Failed to parse nono capability file: ${err}`, "warning");
+			}
 		},
 	});
 }
