@@ -41,7 +41,44 @@
     "allow_domain": [],
     "credentials": [],
     "open_port": [],
-    "listen_port": []
+    "listen_port": [],
+    "custom_credentials": {
+      "openai": {
+        "upstream": "https://api.openai.com/v1",
+        "credential_key": "OPENAI_API_KEY",
+        "inject_header": "Authorization",
+        "credential_format": "Bearer {}",
+        "env_var": "OPENAI_API_KEY"
+      },
+      "anthropic": {
+        "upstream": "https://api.anthropic.com",
+        "credential_key": "ANTHROPIC_API_KEY",
+        "inject_header": "x-api-key",
+        "credential_format": "{}",
+        "env_var": "ANTHROPIC_API_KEY"
+      },
+      "gemini": {
+        "upstream": "https://generativelanguage.googleapis.com",
+        "credential_key": "GOOGLE_API_KEY",
+        "inject_header": "x-goog-api-key",
+        "credential_format": "{}",
+        "env_var": "GOOGLE_API_KEY"
+      },
+      "github": {
+        "upstream": "https://api.github.com",
+        "credential_key": "GITHUB_TOKEN",
+        "inject_header": "Authorization",
+        "credential_format": "token {}",
+        "env_var": "GITHUB_TOKEN"
+      },
+      "gitlab": {
+        "upstream": "https://gitlab.com/api",
+        "credential_key": "GITLAB_TOKEN",
+        "inject_header": "Authorization",
+        "credential_format": "Bearer {}",
+        "env_var": "GITLAB_TOKEN"
+      }
+    }
   },
   "workdir": {
     "access": "readwrite"

@@ -39,6 +39,20 @@ When OMP starts inside nono (`NONO_CAP_FILE` is set), the extension:
 
 When a tool fails with `Operation not permitted`, `Permission denied`, `EACCES`, `EPERM`, `landlock`, or `sandbox denied`, the extension attaches remediation steps directly to the tool output.
 
+## Status indicator
+
+When running inside nono, the extension shows a "nono sandbox" entry above the status panel so the agent and user are always aware of the sandbox boundary. This is on by default (`OMP_NONO_STATUS_INDICATOR=true`, injected by the profile via `environment.set_vars`).
+
+To disable it, edit the installed profile (`~/.config/nono/profiles/omp.json`, or `omp-dev.json` for local dev installs) and set the variable to `"false"`:
+
+```json
+"environment": {
+  "set_vars": { "OMP_NONO_STATUS_INDICATOR": "false" }
+}
+```
+
+Denial detection and system-prompt context injection remain active either way; only the status entry is suppressed.
+
 ## Extending the profile
 
 Create a profile draft to add grants:
