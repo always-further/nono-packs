@@ -4,7 +4,7 @@
     "name": "omp",
     "version": "1.0.0",
     "description": "Oh My Pi coding harness (registry-managed)",
-    "author": "always-further"
+    "author": "rlex"
   },
   "groups": {
     "include": [
@@ -30,7 +30,20 @@
     ],
     "read": [
       "$NONO_PACKAGES",
-      "$NONO_CONFIG/profiles"
+      "$NONO_CONFIG/profiles",
+      "/etc/passwd",
+      "$HOME/.local/share/mise/installs/github-can1357-oh-my-pi/latest/omp",
+      "$HOME/.local/bin/omp",
+      "$HOME/.agents/skills",
+      "$HOME/.codex/skills",
+      "$HOME/.config/opencode/skills",
+      "$HOME/.claude/plugins/cache",
+      "$HOME/.codex/config.toml",
+      "$HOME/.claude/settings.json",
+      "$HOME/.claude/plugins/installed_plugins.json",
+      "$HOME/.claude/plugins/cache",
+      "$HOME/.claude.json",
+      "$HOME/.CFUserTextEncoding"
     ],
     "suppress_save_prompt": [
       "$NONO_PACKAGES/always-further/omp"
