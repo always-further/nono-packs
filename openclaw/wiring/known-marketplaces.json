@@ -1,10 +1,10 @@
 {
-  "always-further": {
+  "nolabs-ai": {
     "source": {
       "source": "directory",
-      "path": "$HOME/.openclaw/plugins/marketplaces/always-further"
+      "path": "$HOME/.openclaw/plugins/marketplaces/nolabs-ai"
     },
-    "installLocation": "$HOME/.openclaw/plugins/marketplaces/always-further",
+    "installLocation": "$HOME/.openclaw/plugins/marketplaces/nolabs-ai",
     "lastUpdated": "$NOW"
   }
 }

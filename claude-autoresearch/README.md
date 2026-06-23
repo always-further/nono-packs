@@ -14,7 +14,7 @@ autoresearch gives Claude autonomous write access to a training codebase and spa
 
 ```bash
 # The claude pack provides the base profile this pack extends
-nono pull always-further/claude
+nono pull nolabs-ai/claude
 nono pull Kexin-xu-01/claude-autoresearch
 ```
 
@@ -22,7 +22,7 @@ This installs the `claude-code-autoresearch` profile and wires the plugin into C
 
 ## Usage
 
-See [autoresearch-nono](https://github.com/always-further/autoresearch-nono) for the full setup guide including attestation, data preparation, and launching.
+See [autoresearch-nono](https://github.com/nolabs-ai/autoresearch-nono) for the full setup guide including attestation, data preparation, and launching.
 
 
 ## What nono adds

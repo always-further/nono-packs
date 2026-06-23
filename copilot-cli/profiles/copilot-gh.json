@@ -4,7 +4,7 @@
     "name": "copilot-cli",
     "version": "0.1.0",
     "description": "profile for sandboxed GitHub Copilot CLI session. Session authentication done via gh.",
-    "author": "always-further"
+    "author": "nolabs-ai"
   },
   "groups": {
     "include": [

@@ -1,10 +1,10 @@
 {
-  "always-further": {
+  "nolabs-ai": {
     "source": {
       "source": "directory",
-      "path": "$HOME/.claude/plugins/marketplaces/always-further"
+      "path": "$HOME/.claude/plugins/marketplaces/nolabs-ai"
     },
-    "installLocation": "$HOME/.claude/plugins/marketplaces/always-further",
+    "installLocation": "$HOME/.claude/plugins/marketplaces/nolabs-ai",
     "lastUpdated": "$NOW"
   }
 }

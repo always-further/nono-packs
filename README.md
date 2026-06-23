@@ -73,7 +73,7 @@ scripts/dev-install.sh <command> <pack> [--namespace <ns>] [--dry-run]
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `--namespace <ns>` | `always-further` | Value substituted for `$NS` in wiring paths |
+| `--namespace <ns>` | `nolabs-ai` | Value substituted for `$NS` in wiring paths |
 | `--dry-run` | — | Print every action without touching the filesystem |
 
 **Examples:**

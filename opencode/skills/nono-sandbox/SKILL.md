@@ -142,6 +142,6 @@ Detached sessions inherit the same sandbox profile as interactive ones — the s
 ## What you should NOT do
 
 - Do not write the profile yourself unless the user explicitly asks for Option B. Present both options first.
-- Do not edit the pack-installed profile at `~/.config/nono/packages/always-further/opencode/policy.json` — it is overwritten on every `nono pull`.
+- Do not edit the pack-installed profile at `~/.config/nono/packages/nolabs-ai/opencode/policy.json` — it is overwritten on every `nono pull`.
 - Do not retry the failing operation in a different way. The sandbox is OS-enforced; alternative paths or commands hit the same boundary.
 - Do not edit registry-managed package files under `~/.config/nono/packages`; create a profile extension instead.

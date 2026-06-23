@@ -28,7 +28,7 @@ Verified from hooks reference. Tools that can cause sandbox denials:
 ### Installed plugins path
 Verified from `https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference`:
 - `~/.copilot/installed-plugins/MARKETPLACE/PLUGIN-NAME/`
-- Wiring symlinks the pack dir to `~/.copilot/installed-plugins/always-further/nono/`.
+- Wiring symlinks the pack dir to `~/.copilot/installed-plugins/nolabs-ai/nono/`.
 
 ### Plugin manifest discovery
 Verified: Copilot CLI checks for plugin manifests at `plugin.json` (root level) among other paths. The existing `copilot-cli/plugin.json` at pack root is correctly positioned — Copilot finds it when scanning the installed plugin directory.
@@ -50,7 +50,7 @@ Verified from `nono/crates/nono-cli/src/package.rs` and `nono/crates/nono-cli/sr
 ### 1. `COPILOT_PLUGIN_ROOT` environment variable
 **Gap**: The Copilot CLI hooks reference does not document which (if any) environment variables Copilot sets when executing hook commands. Claude Code sets `${CLAUDE_PLUGIN_ROOT}` for its hook scripts; Copilot may do the same or use a different name.
 
-**Current approach**: `hooks/hooks.json` uses `${COPILOT_PLUGIN_ROOT:-$HOME/.copilot/installed-plugins/always-further/nono}` — uses `COPILOT_PLUGIN_ROOT` if set, falls back to the hardcoded installed-plugins path.
+**Current approach**: `hooks/hooks.json` uses `${COPILOT_PLUGIN_ROOT:-$HOME/.copilot/installed-plugins/nolabs-ai/nono}` — uses `COPILOT_PLUGIN_ROOT` if set, falls back to the hardcoded installed-plugins path.
 
 **To verify**: Run a test hook with `env | grep -i plugin` and inspect the output, or check the Copilot CLI source for env var injection.
 
@@ -62,11 +62,11 @@ Verified from `nono/crates/nono-cli/src/package.rs` and `nono/crates/nono-cli/sr
 **To verify**: Run the hooks manually during a session and confirm that `additionalContext` is injected as a prepended message. If not, try `{ "additionalContext": "..." }` at the top level (as documented for the `notification` event).
 
 ### 3. Wiring — is a symlink to `installed-plugins/` sufficient?
-**Gap**: The Copilot CLI configuration directory reference returned a 404 during authoring. It is unclear whether placing a symlink at `~/.copilot/installed-plugins/always-further/nono/` is enough for Copilot to discover and load the plugin, or whether additional registration (e.g. via `copilot plugin marketplace add`) is also required.
+**Gap**: The Copilot CLI configuration directory reference returned a 404 during authoring. It is unclear whether placing a symlink at `~/.copilot/installed-plugins/nolabs-ai/nono/` is enough for Copilot to discover and load the plugin, or whether additional registration (e.g. via `copilot plugin marketplace add`) is also required.
 
 **Current approach**: `package.json` wiring creates only the symlink. The `wiring/marketplace.json` is shipped as a plugin artifact for potential manual use.
 
-**To verify**: After `nono pull always-further/nono`, run `copilot plugin list` (or equivalent) and confirm the plugin appears. If not, try `copilot plugin marketplace add ~/.copilot/installed-plugins/always-further/nono/wiring/marketplace.json`.
+**To verify**: After `nono pull nolabs-ai/nono`, run `copilot plugin list` (or equivalent) and confirm the plugin appears. If not, try `copilot plugin marketplace add ~/.copilot/installed-plugins/nolabs-ai/nono/wiring/marketplace.json`.
 
 ### 4. `policy.json` — `add_deny_access` field
 **Gap**: The `copilot-cli/policy.json` uses `"policy": { "add_deny_access": ["$HOME/.nono"] }`. This field does not appear in the `claude` or `codex` profiles. It may be an outdated or non-standard field name.
@@ -117,7 +117,7 @@ Add a trusted publisher entry in the nono registry for:
 
 | Field        | Value                                          |
 |-------------|------------------------------------------------|
-| Repository  | `always-further/nono-packs` (or your repo)    |
+| Repository  | `nolabs-ai/nono-packs` (or your repo)    |
 | Workflow    | `.github/workflows/publish-copilot-cli.yml`   |
 | Ref pattern | `refs/tags/copilot-cli-v*`                    |
 
@@ -130,5 +130,5 @@ scripts/release.sh copilot-cli 1.0.0 --release
 To verify after release:
 
 ```bash
-nono pull always-further/nono --force
+nono pull nolabs-ai/nono --force
 ```

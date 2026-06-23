@@ -62,7 +62,7 @@ The `nono-status` command (registered by the plugin) shows the active session ID
 ## Install
 
 ```bash
-nono pull always-further/opencode
+nono pull nolabs-ai/opencode
 ```
 
 Or let nono prompt you on first use:
@@ -78,7 +78,7 @@ After pulling, opencode reads the plugin from `~/.config/opencode/plugins/nono-s
 ## Removing
 
 ```bash
-nono remove always-further/opencode
+nono remove nolabs-ai/opencode
 ```
 
 ## Package Metadata

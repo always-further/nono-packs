@@ -1,7 +1,7 @@
 {
-  "name": "always-further",
+  "name": "nolabs-ai",
   "interface": {
-    "displayName": "always-further (nono)"
+    "displayName": "nolabs-ai (nono)"
   },
   "plugins": [
     {

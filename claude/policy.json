@@ -4,7 +4,7 @@
     "name": "claude",
     "version": "1.0.0",
     "description": "Anthropic Claude Code CLI agent (registry-managed)",
-    "author": "always-further"
+    "author": "nolabs-ai"
   },
   "groups": {
     "include": [

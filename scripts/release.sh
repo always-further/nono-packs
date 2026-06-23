@@ -180,5 +180,5 @@ Tag pushed. Watch the publish workflow:
   gh run watch --workflow publish-$PACK.yml
 
 When it completes, verify with:
-  nono pull always-further/$PACK --force
+  nono pull nolabs-ai/$PACK --force
 EOF

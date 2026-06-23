@@ -1,10 +1,10 @@
 {
   "version": 2,
   "plugins": {
-    "nono@always-further": [
+    "nono@nolabs-ai": [
       {
         "scope": "user",
-        "installPath": "$HOME/.claude/plugins/cache/always-further/nono/1.0.0",
+        "installPath": "$HOME/.claude/plugins/cache/nolabs-ai/nono/1.0.0",
         "version": "1.0.0",
         "installedAt": "$NOW",
         "lastUpdated": "$NOW"

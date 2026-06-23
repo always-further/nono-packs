@@ -1,8 +1,8 @@
 {
   "$schema": "https://schemas.claude.com/plugin-marketplace.json",
-  "name": "always-further",
-  "description": "nono-managed marketplace for always-further",
-  "owner": { "name": "always-further" },
+  "name": "nolabs-ai",
+  "description": "nono-managed marketplace for nolabs-ai",
+  "owner": { "name": "nolabs-ai" },
   "plugins": [
     {
       "name": "nono",
@@ -10,13 +10,13 @@
       "version": "1.0.0",
       "author": {
         "name": "Always Further",
-        "url": "https://github.com/always-further"
+        "url": "https://github.com/nolabs-ai"
       },
       "source": "./plugins/nono",
       "category": "security",
       "strict": false,
       "homepage": "https://nono.sh",
-      "repository": "https://github.com/always-further/nono-packs/tree/main/claude",
+      "repository": "https://github.com/nolabs-ai/nono-packs/tree/main/claude",
       "license": "Apache-2.0",
       "keywords": ["nono", "sandbox", "security", "capabilities"]
     }

@@ -4,10 +4,10 @@
   "description": "Teaches OpenClaw how to work inside a nono security sandbox. Provides sandbox-aware diagnostics on permission failures and instructions for capability management.",
   "author": {
     "name": "Always Further",
-    "url": "https://github.com/always-further"
+    "url": "https://github.com/nolabs-ai"
   },
   "homepage": "https://nono.sh",
-  "repository": "https://github.com/always-further/nono-packs/tree/main/openclaw",
+  "repository": "https://github.com/nolabs-ai/nono-packs/tree/main/openclaw",
   "license": "Apache-2.0",
   "keywords": ["nono", "sandbox", "security", "capabilities", "openclaw"],
   "skills": "./skills/"

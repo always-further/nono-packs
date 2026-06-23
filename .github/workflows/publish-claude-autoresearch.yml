@@ -40,7 +40,7 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - uses: always-further/agent-sign@38b94e4e4d2c1b33ad5b8e7c4946e2e77fce7d0a
+      - uses: nolabs-ai/agent-sign@38b94e4e4d2c1b33ad5b8e7c4946e2e77fce7d0a
         with:
           publish: "true"
           package-name: claude-autoresearch

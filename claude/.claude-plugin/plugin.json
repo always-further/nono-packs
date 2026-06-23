@@ -4,10 +4,10 @@
   "description": "Teaches Claude Code how to work inside a nono security sandbox. Provides sandbox-aware diagnostics on permission failures and instructions for capability management.",
   "author": {
     "name": "Always Further",
-    "url": "https://github.com/always-further"
+    "url": "https://github.com/nolabs-ai"
   },
   "homepage": "https://nono.sh",
-  "repository": "https://github.com/always-further/nono-packs/tree/main/claude",
+  "repository": "https://github.com/nolabs-ai/nono-packs/tree/main/claude",
   "license": "Apache-2.0",
   "keywords": ["nono", "sandbox", "security", "capabilities"]
 }

@@ -4,19 +4,19 @@
     "PostToolUse": [
       {
         "type": "command",
-        "bash": "${COPILOT_PLUGIN_ROOT:-$HOME/.copilot/installed-plugins/always-further/nono}/bin/nono-hook-bash.sh"
+        "bash": "${COPILOT_PLUGIN_ROOT:-$HOME/.copilot/installed-plugins/nolabs-ai/nono}/bin/nono-hook-bash.sh"
       }
     ],
     "PostToolUseFailure": [
       {
         "type": "command",
-        "bash": "${COPILOT_PLUGIN_ROOT:-$HOME/.copilot/installed-plugins/always-further/nono}/bin/nono-hook.sh"
+        "bash": "${COPILOT_PLUGIN_ROOT:-$HOME/.copilot/installed-plugins/nolabs-ai/nono}/bin/nono-hook.sh"
       }
     ],
     "SessionStart": [
       {
         "type": "command",
-        "bash": "${COPILOT_PLUGIN_ROOT:-$HOME/.copilot/installed-plugins/always-further/nono}/bin/nono-hook-session.sh"
+        "bash": "${COPILOT_PLUGIN_ROOT:-$HOME/.copilot/installed-plugins/nolabs-ai/nono}/bin/nono-hook-session.sh"
       }
     ]
   }

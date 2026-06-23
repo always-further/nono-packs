@@ -5,7 +5,7 @@ Sandbox profile and Goose Open Plugin for running [Goose](https://goose-docs.ai/
 Install:
 
 ```bash
-nono run --profile always-further/goose -- goose
+nono run --profile nolabs-ai/goose -- goose
 ```
 
 If the pack is not already installed, nono will prompt to pull it.

@@ -67,7 +67,7 @@ fi
 PACKAGE_VERSION="$(prompt "Package version" "$DEFAULT_TEST_VERSION")"
 [[ -n "$PACKAGE_VERSION" ]] || { echo "package version is required" >&2; exit 1; }
 
-PACKAGE_NAMESPACE="$(prompt "Package namespace" "always-further")"
+PACKAGE_NAMESPACE="$(prompt "Package namespace" "nolabs-ai")"
 [[ -n "$PACKAGE_NAMESPACE" ]] || { echo "package namespace is required" >&2; exit 1; }
 
 REGISTRY_URL="$(prompt "Registry URL" "https://lukehinds.rat.alwaysfurther.us/api/v1")"

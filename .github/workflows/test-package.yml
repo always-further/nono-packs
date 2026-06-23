@@ -18,7 +18,7 @@ on:
       package_namespace:
         description: Package namespace to publish under.
         required: false
-        default: always-further
+        default: nolabs-ai
         type: string
       registry_url:
         description: Test registry API URL.

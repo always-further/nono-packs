@@ -32,7 +32,7 @@ Commands:
   <pack>    Pack directory under repo root (e.g. claude, codex, copilot-cli)
 
 Options:
-  --namespace <ns>   Value for $NS variable (default: always-further)
+  --namespace <ns>   Value for $NS variable (default: nolabs-ai)
   --dry-run          Print actions; make no changes
 
 Profiles:
@@ -53,7 +53,7 @@ case "$CMD" in
   *) echo "error: unknown command '$CMD'" >&2; usage ;;
 esac
 
-NS="always-further"
+NS="nolabs-ai"
 DRY_RUN=0
 PROFILE_SUFFIX="-dev"
 while [[ $# -gt 0 ]]; do

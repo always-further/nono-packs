@@ -47,7 +47,7 @@
     {
       "type": "toml_block",
       "file": "$HOME/.codex/config.toml",
-      "marker_id": "always-further-codex",
+      "marker_id": "nolabs-ai-codex",
       "content": "wiring/codex-block.toml",
       "position": "top"
     }

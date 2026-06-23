@@ -95,5 +95,5 @@ After drafting, tell the user:
 ## What you should NOT do
 
 - Do not write the profile yourself unless the user explicitly asks for Option B. Present both options first.
-- Do not edit the pack-installed profile at `~/.config/nono/packages/always-further/codex/policy.json` — it's overwritten on every `nono pull`.
+- Do not edit the pack-installed profile at `~/.config/nono/packages/nolabs-ai/codex/policy.json` — it's overwritten on every `nono pull`.
 - Do not retry the failing operation in a different way. The sandbox is OS-enforced; alternative paths or commands hit the same boundary.

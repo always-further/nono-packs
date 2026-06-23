@@ -27,13 +27,13 @@ Pull the package first, then create a custom profile before running. This avoids
 **Step 1 — pull the package:**
 
 ```bash
-nono pull always-further/hermes
+nono pull nolabs-ai/hermes
 ```
 
 **Step 2 — create a custom profile:**
 
 ```bash
-nono profile init hermes --extends always-further/hermes --full
+nono profile init hermes --extends nolabs-ai/hermes --full
 ```
 
 **Step 3 — run Hermes:**
@@ -82,12 +82,12 @@ plugins:
 
 ## Custom profiles
 
-To create your own custom profile that extends the base `always-further/hermes` profile, use the `nono profile init` command with the `--extends` flag. This allows you to inherit from the base profile while customizing specific aspects such as credential routes and network filtering.
+To create your own custom profile that extends the base `nolabs-ai/hermes` profile, use the `nono profile init` command with the `--extends` flag. This allows you to inherit from the base profile while customizing specific aspects such as credential routes and network filtering.
 
 > If you already created a profile via the first-run grants prompt, use that same name here — `nono profile init` will extend it rather than creating a second one.
 
 ```bash
-nono profile init hermes --extends always-further/hermes --full
+nono profile init hermes --extends nolabs-ai/hermes --full
 ```
 
 This will create a `~/.config/nono/profile/hermes.json` file that you can then customize to your needs. The `--full` flag ensures that the generated profile includes all sections, making it easier to see what you can customize.
@@ -375,5 +375,5 @@ nono profile promote hermes-agent
 ### Uninstalling the plugin
 
 ```bash
-nono remove always-further/hermes
+nono remove nolabs-ai/hermes
 ```

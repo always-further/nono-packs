@@ -100,4 +100,4 @@ For load-bearing writes (config that must live at a specific path, credentials, 
 ## What you should NOT do
 
 - Do not retry the failing operation in a different way. The sandbox is OS-enforced; alternative paths hit the same boundary.
-- Do not edit the pack-installed profiles at `~/.config/nono/packages/always-further/copilot-cli/profiles/` — they are overwritten on every `nono pull`.
+- Do not edit the pack-installed profiles at `~/.config/nono/packages/nolabs-ai/copilot-cli/profiles/` — they are overwritten on every `nono pull`.

@@ -66,7 +66,7 @@ nono run --profile copilot-cli-proxy -- copilot
 ## Installation
 
 ```bash
-nono pull always-further/copilot-cli
+nono pull nolabs-ai/copilot-cli
 ```
 
 All three profiles are installed automatically. Use `--profile copilot-cli` or `--profile copilot-cli-proxy` to select one at runtime. `copilot-cli-base` can be used directly but has no auth configuration, so it would requires manual login.

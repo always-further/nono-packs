@@ -12,13 +12,13 @@ Pull the package first, then create a custom profile before running. This avoids
 **Step 1 — pull the package:**
 
 ```bash
-nono pull always-further/pi
+nono pull nolabs-ai/pi
 ```
 
 **Step 2 — create a custom profile:**
 
 ```bash
-nono profile init pi --extends always-further/pi --full
+nono profile init pi --extends nolabs-ai/pi --full
 ```
 
 A custom profile is also where you add credential routes, API keys, tokens, extra filesystem grants, and any other customizations — see the sections below. Its worth running this step, even if you don't think you'll need any custom grants or credentials, just to avoid the grants prompt later. 
@@ -49,7 +49,7 @@ The cleanest approach is to skip (`Enter`) and add any extra paths manually to y
 
 ## Custom profiles 
 
-To create your own custom profile that extends the base `always-further/pi` profile, use the `nono profile init` command with the `--extends` flag. This allows you to inherit from the base profile while customizing specific aspects such as credential routes and network filtering.
+To create your own custom profile that extends the base `nolabs-ai/pi` profile, use the `nono profile init` command with the `--extends` flag. This allows you to inherit from the base profile while customizing specific aspects such as credential routes and network filtering.
 
 Hopefully you already have a `~/.config/nono/profile/pi.json` file from the earlier step (if not go back and run `nono profile init`), you can now edit that file to add credential routes, API keys, tokens, extra filesystem grants, and any other customizations — see the sections below. When you're happy with the profile, create a repo, push the code and add it to this registry, you can then pull your custom profile from any machine`nono pull johndoe/<your-profile>` and run pi just how you like with the same profile and settings everywhere.
 
@@ -338,5 +338,5 @@ nono profile promote pi-agent
 ### Uninstalling the plugin
 
 ```bash
-nono remove always-further/pi
+nono remove nolabs-ai/pi
 ```

@@ -17,7 +17,7 @@ Hermes cannot expand nono access from inside the session. YOLO mode, `/yolo`, `a
 
 ## Provenance
 
-This skill is bundled by the `nono-sandbox` Hermes plugin from the signed `always-further/hermes` nono pack. Load it explicitly as `skill_view("nono-sandbox:nono-sandbox")` when provenance matters.
+This skill is bundled by the `nono-sandbox` Hermes plugin from the signed `nolabs-ai/hermes` nono pack. Load it explicitly as `skill_view("nono-sandbox:nono-sandbox")` when provenance matters.
 
 ## When to use this skill
 

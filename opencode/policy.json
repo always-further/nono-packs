@@ -4,7 +4,7 @@
     "name": "opencode",
     "version": "1.0.0",
     "description": "opencode AI coding assistant (registry-managed)",
-    "author": "always-further"
+    "author": "nolabs-ai"
   },
   "groups": {
     "include": [
@@ -47,7 +47,7 @@
       { "path": "$HOME/Library/Keychains/login.keychain-db", "when": "macos" }
     ],
     "suppress_save_prompt": [
-      "$NONO_PACKAGES/always-further/opencode"
+      "$NONO_PACKAGES/nolabs-ai/opencode"
     ]
   },
   "network": {

@@ -4,7 +4,7 @@
     "name": "hermes",
     "version": "1.0.0",
     "description": "Hermes Agent CLI profile (registry-managed)",
-    "author": "always-further"
+    "author": "nolabs-ai"
   },
   "groups": {
     "include": [
@@ -34,7 +34,7 @@
       "$NONO_PACKAGES"
     ],
     "suppress_save_prompt": [
-      "$NONO_PACKAGES/always-further/hermes/plugin/nono-sandbox"
+      "$NONO_PACKAGES/nolabs-ai/hermes/plugin/nono-sandbox"
     ]
   },
   "network": {

@@ -4,10 +4,10 @@
   "description": "Teaches the Antigravity CLI (agy) how to work inside a nono security sandbox. Provides sandbox-aware diagnostics on permission failures via a PostToolUse hook, plus a nono-sandbox skill.",
   "author": {
     "name": "Always Further",
-    "url": "https://github.com/always-further"
+    "url": "https://github.com/nolabs-ai"
   },
   "homepage": "https://nono.sh",
-  "repository": "https://github.com/always-further/nono-packs/tree/main/antigravity",
+  "repository": "https://github.com/nolabs-ai/nono-packs/tree/main/antigravity",
   "license": "Apache-2.0",
   "keywords": ["nono", "sandbox", "security", "capabilities", "antigravity", "agy"]
 }

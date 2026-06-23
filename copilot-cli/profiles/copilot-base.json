@@ -3,7 +3,7 @@
   "meta": {
     "name": "copilot-cli-base",
     "description": "Base profile for sandboxed GitHub Copilot CLI sessions. Extended by copilot-cli and copilot-cli-proxy.",
-    "author": "always-further"
+    "author": "nolabs-ai"
   },
   "workdir": {
     "access": "readwrite"

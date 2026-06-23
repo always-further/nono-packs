@@ -22,9 +22,9 @@ If the user chooses B:
 If the blocked path is unclear, ask for the path or run `nono why --path <path> --op read` when a concrete path is available.
 """
 
-[marketplaces.always-further]
+[marketplaces.nolabs-ai]
 source_type = "local"
-source = "$HOME/.codex/plugins/marketplaces/always-further"
+source = "$HOME/.codex/plugins/marketplaces/nolabs-ai"
 
-[plugins."nono@always-further"]
+[plugins."nono@nolabs-ai"]
 enabled = true

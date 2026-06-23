@@ -4,7 +4,7 @@
     "name": "pi",
     "version": "1.0.0",
     "description": "Pi Coding Agent profile (registry-managed)",
-    "author": "always-further"
+    "author": "nolabs-ai"
   },
   "groups": {
     "include": [
@@ -35,7 +35,7 @@
       "$NONO_CONFIG/profiles"
     ],
     "suppress_save_prompt": [
-      "$NONO_PACKAGES/always-further/pi"
+      "$NONO_PACKAGES/nolabs-ai/pi"
     ]
   },
     "network": {

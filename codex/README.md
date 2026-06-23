@@ -24,7 +24,7 @@ If the pack isn't already installed, nono will prompt to pull it.
 
 ## Activating the hooks
 
-`nono pull always-further/codex` writes the marketplace registration, the hook entries, and the cache symlink, but leaves your `config.toml` alone — that file often contains user customisations and a clean TOML merge isn't worth the risk of clobbering them. After accepting the install prompt you'll see a one-line reminder if the flag isn't set.
+`nono pull nolabs-ai/codex` writes the marketplace registration, the hook entries, and the cache symlink, but leaves your `config.toml` alone — that file often contains user customisations and a clean TOML merge isn't worth the risk of clobbering them. After accepting the install prompt you'll see a one-line reminder if the flag isn't set.
 
 ## Hook noise
 
@@ -32,6 +32,6 @@ Codex currently renders hook output in the TUI, even for hook entries marked `"s
 
 ## Source
 
-`https://github.com/always-further/nono-packs/tree/main/codex`
+`https://github.com/nolabs-ai/nono-packs/tree/main/codex`
 
 Published via Sigstore-signed releases triggered by tags matching `codex-v*`.

@@ -15,7 +15,7 @@
       "source": "./plugins/claude-autoresearch",
       "category": "security",
       "strict": false,
-      "homepage": "https://github.com/always-further/autoresearch-nono",
+      "homepage": "https://github.com/nolabs-ai/autoresearch-nono",
       "repository": "https://github.com/Kexin-xu-01/nono-packs/tree/main/claude-autoresearch",
       "license": "Apache-2.0",
       "keywords": ["nono", "sandbox", "autoresearch", "gpu", "ml", "training"]

@@ -93,5 +93,5 @@ The profile is captured from runtime-discovered `agy` access (config under
 ## Uninstalling
 
 ```bash
-nono remove always-further/antigravity
+nono remove nolabs-ai/antigravity
 ```

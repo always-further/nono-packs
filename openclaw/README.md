@@ -27,7 +27,7 @@ All sandboxed OpenClaw instances on the same machine share `$TMPDIR/openclaw-$UI
 Requires nono ≥ 0.44.0.
 
 ```bash
-nono pull always-further/openclaw
+nono pull nolabs-ai/openclaw
 ```
 
 ## Usage
@@ -55,8 +55,8 @@ nono run --profile openclaw --home ~/.openclaw-agent1 -- openclaw
 | `bin/nono-hook.sh` | `plugin` | Shell hook: injects capability context and remediation options on permission denial |
 | `nono-hooks/openclaw.plugin.json` | `plugin` | Native plugin manifest for the nono-hooks plugin |
 | `nono-hooks/index.js` | `plugin` | Native message_sending hook: fires for Gemini and all non-Claude model sessions |
-| `wiring/marketplace.json` | `plugin` | Marketplace manifest describing the `always-further` plugin registry |
-| `wiring/known-marketplaces.json` | `plugin` | Registers the `always-further` marketplace in OpenClaw's known-marketplaces list |
+| `wiring/marketplace.json` | `plugin` | Marketplace manifest describing the `nolabs-ai` plugin registry |
+| `wiring/known-marketplaces.json` | `plugin` | Registers the `nolabs-ai` marketplace in OpenClaw's known-marketplaces list |
 | `wiring/installed-plugin.json` | `plugin` | Marks both plugins as installed in OpenClaw's plugin registry |
 
 ## Policy Details

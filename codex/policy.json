@@ -4,7 +4,7 @@
     "name": "codex",
     "version": "1.0.0",
     "description": "OpenAI Codex CLI agent (registry-managed)",
-    "author": "always-further"
+    "author": "nolabs-ai"
   },
   "groups": {
     "include": [
