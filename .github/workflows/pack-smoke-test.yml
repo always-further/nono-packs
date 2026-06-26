@@ -38,7 +38,7 @@ jobs:
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Detect changed packs
         id: detect
@@ -52,13 +52,12 @@ jobs:
           fi
 
           # Find top-level directories that changed and contain a package.json
-          PACKS=$(git diff --name-only "$BASE" HEAD \
-            | grep -oE '^[^/]+' \
-            | sort -u \
-            | while read -r dir; do
-                [[ -f "$dir/package.json" ]] && echo "$dir"
-              done \
-            | jq -Rsc 'split("\n") | map(select(length > 0))')
+          CHANGED=$(git diff --name-only "$BASE" HEAD | grep -oE '^[^/]+' | sort -u || true)
+          PACK_LIST=""
+          while read -r dir; do
+            [[ -n "$dir" && -f "$dir/package.json" ]] && PACK_LIST+="$dir"$'\n'
+          done <<< "$CHANGED"
+          PACKS=$(echo "$PACK_LIST" | jq -Rsc 'split("\n") | map(select(length > 0))')
 
           echo "packs=$PACKS" >> "$GITHUB_OUTPUT"
           echo "Changed packs: $PACKS"
