@@ -16,18 +16,35 @@
   },
   "filesystem": {
     "allow": [
-      "/usr/local/Caskroom/copilot-cli",
+      { "path": "/usr/local/Caskroom/copilot-cli", "when": "macos" },
+      { "path": "/usr/local/bin/copilot", "when": "linux" },
+      { "path": "/usr/bin/copilot", "when": "linux" },
+      { "path": "/home/linuxbrew/.linuxbrew/bin/copilot", "when": "linux" },
       "$HOME/.copilot",
-      "$HOME/Library/Caches/copilot",
-      "$HOME/.cache/copilot/"
+      { "path": "$HOME/Library/Caches/copilot", "when": "macos" },
+      { "path": "$HOME/.cache/copilot", "when": "linux" }
     ],
     "read": [
       "$HOME/.config/gh",
       "$HOME/.agents/skills"
     ],
     "read_file": [
-      "$HOME/Library/Application Support/Code/User/keybindings.json",
-      "$HOME/Library/Application Support/Microsoft/DeveloperTools/deviceid"
+      {
+        "path": "$HOME/Library/Application Support/Code/User/keybindings.json",
+        "when": "macos"
+      },
+      {
+        "path": "$HOME/.config/Code/User/keybindings.json",
+        "when": "linux"
+      },
+      {
+        "path": "$HOME/Library/Application Support/Microsoft/DeveloperTools/deviceid",
+        "when": "macos"
+      },
+      {
+        "path": "$HOME/.config/Microsoft/DeveloperTools/deviceid",
+        "when": "linux"
+      }
     ]
   },
   "open_urls": {

@@ -5,7 +5,8 @@
   "description": "GitHub Copilot CLI plugin and matching nono profile. Provides sandbox-aware diagnostics on permission failures via PostToolUseFailure, PostToolUse, and SessionStart hooks.",
   "license": "Apache-2.0",
   "platforms": [
-    "macos"
+    "macos",
+    "linux"
   ],
   "min_nono_version": "0.58.0",
   "artifacts": [
