@@ -12,8 +12,6 @@ platforms: [macos, linux]
 
 # Working inside a nono sandbox
 
-Path references in this skill use `$XDG_CONFIG_HOME`. If that variable is not set, substitute `~/.config`. nono and opencode both follow the XDG Base Directory Specification.
-
 The user has launched you with `nono run --profile <name> -- opencode`. nono enforces filesystem and network limits at the OS level (Landlock on Linux, Seatbelt on macOS). These are kernel-enforced boundaries — retries or workarounds inside opencode cannot grant access that nono hasn't already permitted.
 
 ## Identifying a sandbox denial
@@ -140,6 +138,10 @@ Detached sessions inherit the same sandbox profile as interactive ones — the s
 - The skill at `$XDG_CONFIG_HOME/opencode/skills/nono-sandbox/` is similarly symlinked.
 - The `nono-status` command (registered by the plugin) shows the active capability set, enabled credential routes, and the session ID for reattach.
 - Do not add provider secrets to opencode's own config files. Route them through `network.credentials` in the profile instead.
+
+## Path conventions
+
+Path references in this skill use `$XDG_CONFIG_HOME`. If that variable is not set, substitute `~/.config`. nono and opencode both follow the XDG Base Directory Specification.
 
 ## What you should NOT do
 
