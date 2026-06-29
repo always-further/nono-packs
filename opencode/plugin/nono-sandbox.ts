@@ -43,6 +43,14 @@ function extractPath(text: string): string | null {
   return candidate || null
 }
 
+function nonoConfigHome(): string {
+  return (process.env.XDG_CONFIG_HOME ?? `${process.env.HOME ?? "~"}/.config`) + "/nono"
+}
+
+function profileDraftsDir(): string {
+  return nonoConfigHome() + "/profile-drafts"
+}
+
 function buildCredentialLines(caps: Caps): string {
   const routes = caps.credentials ?? {}
   const keys = Object.keys(routes)
@@ -90,7 +98,7 @@ function buildGuidance(caps: Caps, blockedPath: string | null): string {
     "1. Run `" + whyCmd + "` and include output verbatim.",
     "2. Present the user with exactly these two options:",
     "   Option A (quick fix):  " + allowCmd,
-    "   Option B (persistent): draft a profile to ~/.config/nono/profile-drafts/<name>.json",
+    "   Option B (persistent): draft a profile to " + profileDraftsDir() + "/<name>.json",
     "                          extending `opencode`, add the path under `\"allow\"` or `\"read\"`,",
     "                          then tell the user: run `nono profile promote <name>`",
     "                          and start future sessions with `nono run --profile <name> -- opencode`",
@@ -112,11 +120,11 @@ If a tool or shell command fails with "Operation not permitted", "Permission den
 1. Run: nono why --path <blocked-path> --op <read|write|readwrite>
 2. Offer the user exactly two options:
    Option A: nono run --allow /path/to/needed -- opencode
-   Option B: draft ~/.config/nono/profile-drafts/<name>.json extending "opencode", then have the user run nono profile promote <name>
+   Option B: draft ${profileDraftsDir()}/<name>.json extending "opencode", then have the user run nono profile promote <name>
 
 Credential injection is active for configured routes. Do not read or write API keys directly — nono injects them transparently via its proxy.
 
-Do not edit ~/.config/nono/profiles or ~/.config/nono/packages from inside the sandbox.
+Do not edit ${nonoConfigHome()}/profiles or ${nonoConfigHome()}/packages from inside the sandbox.
 `.trim()
 }
 

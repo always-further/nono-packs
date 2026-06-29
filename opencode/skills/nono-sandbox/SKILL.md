@@ -8,9 +8,11 @@ platforms: [macos, linux]
 **On any EPERM / EACCES / "Operation not permitted" tool or shell failure:** run `nono why --path <blocked-path> --op read` immediately and include its output verbatim in your reply. Do NOT suggest sudo, chmod, or system permission changes. Then offer the user exactly these two options:
 
 - **Option A (quick fix):** `nono run --allow /path/to/needed -- opencode`
-- **Option B (persistent fix):** draft a profile to `~/.config/nono/profile-drafts/<name>.json` extending `opencode`, add the path under `"allow"` or `"read"`, then tell the user to run `nono profile promote <name>` and start sessions with `nono run --profile <name> -- opencode`
+- **Option B (persistent fix):** draft a profile to `$XDG_CONFIG_HOME/nono/profile-drafts/<name>.json` extending `opencode`, add the path under `"allow"` or `"read"`, then tell the user to run `nono profile promote <name>` and start sessions with `nono run --profile <name> -- opencode`
 
 # Working inside a nono sandbox
+
+Path references in this skill use `$XDG_CONFIG_HOME`. If that variable is not set, substitute `~/.config`. nono and opencode both follow the XDG Base Directory Specification.
 
 The user has launched you with `nono run --profile <name> -- opencode`. nono enforces filesystem and network limits at the OS level (Landlock on Linux, Seatbelt on macOS). These are kernel-enforced boundaries — retries or workarounds inside opencode cannot grant access that nono hasn't already permitted.
 
@@ -55,9 +57,9 @@ Use `--read` when only read access is needed.
 
 ### Option B — persistent fix (draft a profile)
 
-The active profile directory `~/.config/nono/profiles/` is read-only from inside the sandbox by design. Drafts are written to `~/.config/nono/profile-drafts/` and the user promotes them out-of-band with `nono profile promote`.
+The active profile directory `$XDG_CONFIG_HOME/nono/profiles/` is read-only from inside the sandbox by design. Drafts are written to `$XDG_CONFIG_HOME/nono/profile-drafts/` and the user promotes them out-of-band with `nono profile promote`.
 
-Write the JSON to `~/.config/nono/profile-drafts/<chosen-name>.json` extending the active profile. Minimal example for read-only access:
+Write the JSON to `$XDG_CONFIG_HOME/nono/profile-drafts/<chosen-name>.json` extending the active profile. Minimal example for read-only access:
 
     {
       "extends": "opencode",
@@ -67,7 +69,7 @@ Write the JSON to `~/.config/nono/profile-drafts/<chosen-name>.json` extending t
 
 If the user is on a custom intermediate profile (e.g. `--profile opencode-with-docs` extending `opencode`), change `extends` to that profile's name so the new profile inherits all their customisations.
 
-If a user profile of that name already exists, read `~/.config/nono/profiles/<chosen-name>.json` first, base your edit on that profile, write the full proposed profile to `~/.config/nono/profile-drafts/<chosen-name>.json`, and write a SHA-256 of the base bytes to `~/.config/nono/profile-drafts/<chosen-name>.base`.
+If a user profile of that name already exists, read `$XDG_CONFIG_HOME/nono/profiles/<chosen-name>.json` first, base your edit on that profile, write the full proposed profile to `$XDG_CONFIG_HOME/nono/profile-drafts/<chosen-name>.json`, and write a SHA-256 of the base bytes to `$XDG_CONFIG_HOME/nono/profile-drafts/<chosen-name>.base`.
 
 Filesystem field choices:
 - `"read"` — read-only directory or file access
@@ -107,7 +109,7 @@ Routes are defined in the profile but **disabled by default**. To enable one, cr
       "network": { "credentials": ["anthropic"] }
     }
 
-Do not read or write API keys directly from inside the sandbox. Prefer nono phantom credential routes. If opencode stores a key in `~/.config/opencode/`, it is visible to the sandboxed process — use the proxy route instead.
+Do not read or write API keys directly from inside the sandbox. Prefer nono phantom credential routes. If opencode stores a key in `$XDG_CONFIG_HOME/opencode/`, it is visible to the sandboxed process — use the proxy route instead.
 
 ## Detach and attach
 
@@ -133,15 +135,15 @@ Detached sessions inherit the same sandbox profile as interactive ones — the s
 
 ## opencode-specific notes
 
-- opencode state, sessions, config, and cache live under `~/.opencode`, `~/.config/opencode`, `~/.cache/opencode`, `~/.local/share/opencode`, and `~/.local/state/opencode`. The base profile grants all of these read/write.
-- The plugin at `~/.config/opencode/plugins/nono-sandbox.ts` is symlinked from the pack store. It updates automatically on `nono pull`.
-- The skill at `~/.config/opencode/skills/nono-sandbox/` is similarly symlinked.
+- opencode state, sessions, config, and cache live under `~/.opencode`, `$XDG_CONFIG_HOME/opencode`, `$XDG_CACHE_HOME/opencode`, `$XDG_DATA_HOME/opencode`, and `$XDG_STATE_HOME/opencode`. The base profile grants all of these read/write.
+- The plugin at `$XDG_CONFIG_HOME/opencode/plugins/nono-sandbox.ts` is symlinked from the pack store. It updates automatically on `nono pull`.
+- The skill at `$XDG_CONFIG_HOME/opencode/skills/nono-sandbox/` is similarly symlinked.
 - The `nono-status` command (registered by the plugin) shows the active capability set, enabled credential routes, and the session ID for reattach.
 - Do not add provider secrets to opencode's own config files. Route them through `network.credentials` in the profile instead.
 
 ## What you should NOT do
 
 - Do not write the profile yourself unless the user explicitly asks for Option B. Present both options first.
-- Do not edit the pack-installed profile at `~/.config/nono/packages/always-further/opencode/policy.json` — it is overwritten on every `nono pull`.
+- Do not edit the pack-installed profile at `$XDG_CONFIG_HOME/nono/packages/always-further/opencode/policy.json` — it is overwritten on every `nono pull`.
 - Do not retry the failing operation in a different way. The sandbox is OS-enforced; alternative paths or commands hit the same boundary.
-- Do not edit registry-managed package files under `~/.config/nono/packages`; create a profile extension instead.
+- Do not edit registry-managed package files under `$XDG_CONFIG_HOME/nono/packages`; create a profile extension instead.
