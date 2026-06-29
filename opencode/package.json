@@ -52,12 +52,12 @@
     },
     {
       "type": "symlink",
-      "link": "$HOME/.config/opencode/plugins/nono-sandbox.ts",
+      "link": "$XDG_CONFIG_HOME/opencode/plugins/nono-sandbox.ts",
       "target": "$PACK_DIR/plugin/nono-sandbox.ts"
     },
     {
       "type": "symlink",
-      "link": "$HOME/.config/opencode/skills/nono-sandbox",
+      "link": "$XDG_CONFIG_HOME/opencode/skills/nono-sandbox",
       "target": "$PACK_DIR/skills/nono-sandbox"
     }
   ]
