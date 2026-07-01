@@ -1,7 +1,7 @@
 ---
 name: nono-sandbox
-description: Diagnose and resolve permission denials when opencode runs inside a nono security sandbox. Use this when a tool call, shell command, or file operation fails with "Operation not permitted", "Permission denied", EACCES, EPERM, landlock, or sandbox-denied errors.
-version: 1.1.0
+description: Diagnose and resolve permission denials when opencode runs inside a nono security sandbox. Use this when a tool call, shell command, or file operation fails with "Operation not permitted", "Permission denied", EACCES, EPERM, landlock, or sandbox-denied errors, or when an outbound network request fails because the host is not on the sandbox allowlist (connection refused, timeout, or proxy/TLS errors).
+version: 1.2.0
 platforms: [macos, linux]
 ---
 
@@ -30,6 +30,8 @@ When you see any of these on a file, shell, or tool failure, it is a nono bounda
 - `chmod`, `chown`, `sudo`
 - "grant Full Disk Access to your terminal"
 - Retrying the operation via a different path
+
+Network-egress denials look different: a request to a host that is not on the sandbox allowlist fails as a connection refused, timeout, or TLS/proxy error rather than an EPERM. Those are covered in the Network egress denials section below.
 
 ## Diagnosing
 
@@ -79,6 +81,30 @@ For a single file rather than a directory, use `"allow_file"` / `"read_file"` / 
 After drafting, tell the user:
 
     Drafted profile <chosen-name>. Run `nono profile promote <chosen-name>` to review and apply, then start sessions with `nono run --profile <chosen-name> -- opencode`.
+
+## Network egress denials
+
+nono routes outbound traffic through a filtering proxy. When `network.block` is false but a host allowlist is set, only allowlisted hosts are reachable and every other connection fails — usually as a connection refused, timeout, or TLS/proxy error rather than an EPERM. `nono-status` lists the reachable hosts under "reachable hosts". Retries, alternate endpoints, proxies, or DNS changes cannot bypass the proxy; it is OS-enforced.
+
+If a host is genuinely needed, present the same two options as for filesystem denials.
+
+### Option A — quick fix (one-off)
+
+    nono run --allow-domain api.example.com -- opencode
+
+`--allow-domain` is repeatable and accepts a plain hostname for unrestricted access, or a URL with a path glob to restrict to specific endpoints (e.g. `https://github.com/org/**`).
+
+### Option B — persistent fix (draft a profile)
+
+Add the host to `network.allow_domain` in a profile draft extending the active profile:
+
+    {
+      "extends": "opencode",
+      "meta": { "name": "<chosen-name>", "version": "1.0.0" },
+      "network": { "allow_domain": ["api.example.com"] }
+    }
+
+Then tell the user to run `nono profile promote <chosen-name>` and start sessions with `nono run --profile <chosen-name> -- opencode`.
 
 ## Validating the new profile
 
@@ -136,7 +162,7 @@ Detached sessions inherit the same sandbox profile as interactive ones — the s
 - opencode state, sessions, config, and cache live under `~/.opencode`, `$XDG_CONFIG_HOME/opencode`, `$XDG_CACHE_HOME/opencode`, `$XDG_DATA_HOME/opencode`, and `$XDG_STATE_HOME/opencode`. The base profile grants all of these read/write.
 - The plugin at `$XDG_CONFIG_HOME/opencode/plugins/nono-sandbox.ts` is symlinked from the pack store. It updates automatically on `nono pull`.
 - The skill at `$XDG_CONFIG_HOME/opencode/skills/nono-sandbox/` is similarly symlinked.
-- The `nono-status` command (registered by the plugin) shows the active capability set, enabled credential routes, and the session ID for reattach.
+- The `nono-status` command (registered by the plugin) shows the active capability set, the network egress allowlist (reachable hosts), enabled credential routes, and the session ID for reattach.
 - Do not add provider secrets to opencode's own config files. Route them through `network.credentials` in the profile instead.
 
 ## Path conventions
@@ -147,5 +173,5 @@ Path references in this skill use `$XDG_CONFIG_HOME`. If that variable is not se
 
 - Do not write the profile yourself unless the user explicitly asks for Option B. Present both options first.
 - Do not edit the pack-installed profile at `$XDG_CONFIG_HOME/nono/packages/always-further/opencode/policy.json` — it is overwritten on every `nono pull`.
-- Do not retry the failing operation in a different way. The sandbox is OS-enforced; alternative paths or commands hit the same boundary.
+- Do not retry the failing operation in a different way. The sandbox is OS-enforced; alternative paths, endpoints, or commands hit the same boundary.
 - Do not edit registry-managed package files under `$XDG_CONFIG_HOME/nono/packages`; create a profile extension instead.

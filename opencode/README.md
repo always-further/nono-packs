@@ -9,8 +9,8 @@ It installs a sandbox profile, a TypeScript plugin, and a skill that make openco
 The pack provides:
 
 - a sandbox profile (`policy.json`) granting the correct filesystem and network access, with credential injection routes for OpenAI, Anthropic, Gemini, GitHub, and GitLab
-- a TypeScript plugin (`plugin/nono-sandbox.ts`) that injects nono sandbox context at session start, detects denial signatures in tool results, appends capability context and Option A/B remediation guidance, and registers a `nono-status` command
-- a `nono-sandbox` skill that teaches the correct diagnostic flow, credential route setup, and detach/attach usage
+- a TypeScript plugin (`plugin/nono-sandbox.ts`) that injects nono sandbox context at session start, detects denial signatures in tool results, appends capability context and Option A/B remediation guidance, surfaces the network egress allowlist, and registers a `nono-status` command
+- a `nono-sandbox` skill that teaches the correct diagnostic flow for filesystem and network-egress denials, credential route setup, and detach/attach usage
 
 ## Behavior
 
@@ -21,9 +21,10 @@ When opencode is running inside a `nono` sandbox the installed plugin:
 - surfaces the session ID (for `nono attach`) when running detached
 - detects sandbox-denial signatures in tool results (`Operation not permitted`, `EACCES`, `EPERM`, `landlock`)
 - appends the active capability set, credential route summary, and remediation instructions so the model always receives correct guidance
+- reports the network egress allowlist (reachable hosts) with state-aware guidance for blocked, allowlisted, and unrestricted networking
 - steers the model toward the two valid remediations: `--allow` restart or a persistent profile draft
 
-This prevents common bad guidance such as retrying the same action, suggesting `chmod`, or treating the failure as a macOS TCC issue.
+This prevents common bad guidance such as retrying the same action, suggesting `chmod`, attempting network workarounds, or treating the failure as a macOS TCC issue.
 
 ## Credential Injection
 
@@ -84,7 +85,7 @@ nono remove always-further/opencode
 ## Package Metadata
 
 - Name: `opencode`
-- Version: `0.0.2`
+- Version: `0.0.6`
 - Pack type: `agent`
 - Platforms: `macos`, `linux`
 - License: `Apache-2.0`
