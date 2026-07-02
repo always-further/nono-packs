@@ -73,7 +73,7 @@ nono run --profile opencode -- opencode
 
 ## Activation
 
-After pulling, opencode reads the plugin from `~/.config/opencode/plugins/nono-sandbox.ts` and the skill from `~/.config/opencode/skills/nono-sandbox/SKILL.md`. Both are symlinked from the pack store and update automatically on `nono pull`.
+After pulling, opencode reads the plugin from `$XDG_CONFIG_HOME/opencode/plugins/nono-sandbox.ts` and the skill from `$XDG_CONFIG_HOME/opencode/skills/nono-sandbox/SKILL.md`. Both are symlinked from the pack store and update automatically on `nono pull`. If `XDG_CONFIG_HOME` is unset, the default `~/.config` applies.
 
 ## Removing
 
