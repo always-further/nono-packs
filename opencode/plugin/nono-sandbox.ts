@@ -15,6 +15,7 @@ type CredentialRoute = {
 type Caps = {
   fs?: Array<{ path: string; resolved?: string; access: string }>
   net_blocked?: boolean
+  allowed_domains?: string[]
   credentials?: Record<string, CredentialRoute>
   session_id?: string
 }
@@ -65,6 +66,30 @@ function buildCredentialLines(caps: Caps): string {
     .join("\n")
 }
 
+function buildDomainLines(caps: Caps): string {
+  const domains = caps.allowed_domains ?? []
+  if (domains.length === 0) {
+    return caps.net_blocked
+      ? "  (all outbound network blocked)"
+      : "  (no allowlist — all outbound network allowed)"
+  }
+  return domains.map(d => "  " + d).join("\n")
+}
+
+function buildEgressGuidance(caps: Caps): string {
+  const domains = caps.allowed_domains ?? []
+  if (caps.net_blocked) {
+    return "All outbound network is blocked. Retries, alternate endpoints, or proxies cannot bypass this — do not attempt workarounds."
+  }
+  if (domains.length === 0) {
+    return "No host allowlist is in effect; all outbound network is allowed."
+  }
+  return [
+    "Network egress is default-deny; only these hosts are reachable. Any other outbound connection fails by design — retries, alternate endpoints, or proxies cannot bypass it, so do not attempt workarounds:",
+    buildDomainLines(caps),
+  ].join("\n")
+}
+
 function buildGuidance(caps: Caps, blockedPath: string | null): string {
   const pathLines =
     (caps.fs ?? [])
@@ -90,6 +115,9 @@ function buildGuidance(caps: Caps, blockedPath: string | null): string {
     "Allowed paths in this session:",
     pathLines,
     "Network: " + net,
+    "",
+    "Reachable hosts (allowlist):",
+    buildDomainLines(caps),
     "",
     "Active credential routes:",
     buildCredentialLines(caps),
@@ -124,6 +152,8 @@ If a tool or shell command fails with "Operation not permitted", "Permission den
 
 Credential injection is active for configured routes. Do not read or write API keys directly — nono injects them transparently via its proxy.
 
+${buildEgressGuidance(caps)}
+
 Do not edit ${nonoConfigHome()}/profiles or ${nonoConfigHome()}/packages from inside the sandbox.
 `.trim()
 }
@@ -141,6 +171,8 @@ function buildStatusReport(caps: Caps | null): string {
     "nono sandbox: active",
     sessionId ? "session: " + sessionId + "  (reattach: nono attach " + sessionId + ")" : "",
     "network: " + net,
+    "reachable hosts:",
+    buildDomainLines(caps),
     "filesystem:",
     fsPaths,
     "credential routes:",

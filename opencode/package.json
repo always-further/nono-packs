@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "opencode",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "opencode plugin and matching nono profile. Provides sandbox-aware diagnostics, credential injection, detach/attach support, and a nono-status command when running inside a nono sandbox.",
   "license": "Apache-2.0",
   "platforms": [
