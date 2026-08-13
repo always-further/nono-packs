@@ -13,16 +13,17 @@
   },
   "filesystem": {
     "write": [
-      "$HOME/Library/Keychains"
+      { "path": "$HOME/Library/Keychains", "when": "macos" }
     ],
     "read_file": [
-      "$HOME/Library/Keychains/login.keychain-db"
+      { "path": "$HOME/Library/Keychains/login.keychain-db", "when": "macos" }
     ],
     "bypass_protection": [
-      "$HOME/Library/Keychains"
+      { "path": "$HOME/Library/Keychains", "when": "macos" }
     ],
     "read": [
-      "/usr/local/etc/gitconfig"
+      { "path": "/usr/local/etc/gitconfig", "when": "macos" },
+      { "path": "/etc/gitconfig", "when": "linux" }
     ]
   }
 }
