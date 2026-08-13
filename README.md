@@ -1,5 +1,7 @@
 # nono-packs
 
+# This is no longer the active repo, all packages are now at https://github.com/nolabs-ai/nono-packs
+
 `nono-packs` is the package and plugin registry for the `nono` ecosystem.
 
 This repository is the source for installable packs that extend agent runtimes with `nono`-specific integrations such as:
