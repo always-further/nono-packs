@@ -1,0 +1,117 @@
+name: Pack smoke test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "antigravity/**"
+      - "claude/**"
+      - "claude-autoresearch/**"
+      - "codex/**"
+      - "copilot-cli/**"
+      - "goose/**"
+      - "hermes/**"
+      - "openclaw/**"
+      - "opencode/**"
+      - "pi/**"
+  pull_request:
+    paths:
+      - "antigravity/**"
+      - "claude/**"
+      - "claude-autoresearch/**"
+      - "codex/**"
+      - "copilot-cli/**"
+      - "goose/**"
+      - "hermes/**"
+      - "openclaw/**"
+      - "opencode/**"
+      - "pi/**"
+
+permissions:
+  contents: read
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      packs: ${{ steps.detect.outputs.packs }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed packs
+        id: detect
+        run: |
+          set -euo pipefail
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE="HEAD^"
+          fi
+
+          # Find top-level directories that changed and contain a package.json
+          CHANGED=$(git diff --name-only "$BASE" HEAD | grep -oE '^[^/]+' | sort -u || true)
+          PACK_LIST=""
+          while read -r dir; do
+            [[ -n "$dir" && -f "$dir/package.json" ]] && PACK_LIST+="$dir"$'\n'
+          done <<< "$CHANGED"
+          PACKS=$(echo "$PACK_LIST" | jq -Rsc 'split("\n") | map(select(length > 0))')
+
+          echo "packs=$PACKS" >> "$GITHUB_OUTPUT"
+          echo "Changed packs: $PACKS"
+
+  smoke:
+    needs: detect
+    if: needs.detect.outputs.packs != '[]' && needs.detect.outputs.packs != ''
+    strategy:
+      fail-fast: false
+      matrix:
+        pack: ${{ fromJson(needs.detect.outputs.packs) }}
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Download latest nono release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          VERSION=$(gh release view --repo nolabs-ai/nono --json tagName -q .tagName)
+          VERSION="${VERSION#v}"  # strip leading 'v'
+
+          ARCH=$(uname -m)   # x86_64 or aarch64 / arm64
+          OS=$(uname -s)     # Linux or Darwin
+
+          case "$OS/$ARCH" in
+            Linux/x86_64)   ASSET="nono-v${VERSION}-x86_64-unknown-linux-gnu.tar.gz" ;;
+            Linux/aarch64)  ASSET="nono-v${VERSION}-aarch64-unknown-linux-gnu.tar.gz" ;;
+            Darwin/x86_64)  ASSET="nono-v${VERSION}-x86_64-apple-darwin.tar.gz" ;;
+            Darwin/arm64)   ASSET="nono-v${VERSION}-aarch64-apple-darwin.tar.gz" ;;
+            *) echo "Unsupported platform: $OS/$ARCH" >&2; exit 1 ;;
+          esac
+
+          gh release download "v${VERSION}" \
+            --repo nolabs-ai/nono \
+            --pattern "$ASSET" \
+            --output nono.tar.gz
+
+          tar -xzf nono.tar.gz
+          chmod +x nono
+          echo "NONO_BIN=$PWD/nono" >> "$GITHUB_ENV"
+          echo "nono version: $($PWD/nono --version 2>&1 || true)"
+
+      - name: Install pack into nono store
+        run: |
+          set -euo pipefail
+          bash scripts/install-pack-local.sh "${{ matrix.pack }}"
+
+      - name: Run smoke tests
+        env:
+          NONO_SKIP_SANDBOX: "1"
+        run: |
+          bash scripts/smoke-test-pack.sh "always-further/${{ matrix.pack }}"
