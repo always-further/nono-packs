@@ -28,11 +28,15 @@
     "allow": [
       "$HOME/.codex",
       "$HOME/.agents",
-      "$NONO_CONFIG/profile-drafts"
+      "$NONO_CONFIG/profile-drafts",
+      { "path": "$HOME/Library/Keychains", "when": "macos" }
     ],
     "read": [
       "$NONO_PACKAGES",
       "$NONO_CONFIG/profiles"
+    ],
+    "bypass_protection": [
+      { "path": "$HOME/Library/Keychains", "when": "macos" }
     ]
   },
   "network": { "block": false },
